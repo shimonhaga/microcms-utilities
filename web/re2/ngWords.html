@@ -51,7 +51,7 @@
     <pre id="result"></pre>
 
     <script src="../../src/re2/ngWords.js"></script>
-    <script src="./ngWords.web.js"></script>
+    <script src="./ngWords.js"></script>
     <script>
       const ngWordsElement = document.getElementById('ngWords');
       const textElement = document.getElementById('text');
@@ -61,19 +61,13 @@
 
       function run() {
         try {
-          const ngWords = window.ngWordsUtils.parseNgWords(ngWordsElement.value);
-          const alphabetClass = alphabetClassElement.value || '[a-z0-9_-]';
-          const pattern = window.ngWordsUtils.buildExpandedSafeRegexSource(ngWords, alphabetClass);
-          const allowed = window.ngWordsUtils.isAllowed(textElement.value, ngWords, alphabetClass);
-
+          const result = window.ngWordsUtils.runWeb(
+            ngWordsElement.value,
+            alphabetClassElement.value || '[a-z0-9_-]',
+            textElement.value,
+          );
           resultElement.textContent = JSON.stringify(
-            {
-              ngWords,
-              text: textElement.value,
-              alphabetClass,
-              pattern,
-              allowed,
-            },
+            result,
             null,
             2,
           );

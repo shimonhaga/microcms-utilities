@@ -2,17 +2,6 @@ const RE2 = require('re2');
 const { buildExpandedSafeRegexSource } = require('../../src/re2/ngWords');
 
 /**
- * 先読み/後読みを使わない展開済み safe regex を RE2 インスタンスとして返す
- * @param {string[]} ngWords
- * @param {string} [alphabetClass='[a-z0-9_-]']
- * @returns {RE2}
- */
-function buildExpandedSafeRegex(ngWords, alphabetClass = '[a-z0-9_-]') {
-  const source = buildExpandedSafeRegexSource(ngWords, alphabetClass);
-  return new RE2(source);
-}
-
-/**
  * CLI: node cli/re2/ngWords.js NG1 NG2 [--alphabetClass "[a-z0-9_-]"] [--text "チェック対象"]
  */
 function runCli() {
@@ -90,6 +79,5 @@ if (require.main === module) {
 }
 
 module.exports = {
-  buildExpandedSafeRegex,
   runCli,
 };

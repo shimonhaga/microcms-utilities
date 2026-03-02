@@ -1,11 +1,11 @@
-(function initngWords(root, factory) {
+(function initNgWords(root, factory) {
   if (typeof module === 'object' && module.exports) {
     module.exports = factory();
     return;
   }
 
   root.ngWords = factory();
-})(typeof globalThis !== 'undefined' ? globalThis : this, function createngWords() {
+})(typeof globalThis !== 'undefined' ? globalThis : this, function createNgWords() {
   /**
    * 正規表現のメタ文字をエスケープする
    * @param {string} value
@@ -111,22 +111,9 @@
     return `^(${regexSource})$`;
   }
 
-  /**
-   * @param {string} input
-   * @returns {string[]}
-   */
-  function parseNgWords(input) {
-    if (typeof input !== 'string') {
-      return [];
-    }
-
-    return [...new Set(input.split(/[\n,]/).map((word) => word.trim()).filter(Boolean))];
-  }
-
   return {
     escapeRegExp,
     escapeForCharClass,
     buildExpandedSafeRegexSource,
-    parseNgWords,
   };
 });
