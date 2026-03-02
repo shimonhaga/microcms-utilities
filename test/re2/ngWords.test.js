@@ -6,7 +6,8 @@ const path = require('node:path');
 const {
   buildExpandedSafeRegexSource,
   buildExpandedSafeRegex,
-} = require('../src/re2/ngWords');
+} = require('../../src/re2/ngWords');
+const cliPath = path.join(__dirname, '../..', 'src', 're2', 'ngWords.js');
 
 test('先読み/後読みなし展開 source を生成できる(news/spec 例)', () => {
   const source = buildExpandedSafeRegexSource(['news', 'spec']);
@@ -27,7 +28,6 @@ test('展開 safe regex は禁止語を false にできる', () => {
 });
 
 test('CLI は --text 指定時に allowed を返す', () => {
-  const cliPath = path.join(__dirname, '..', 'src', 're2', 'ngWords.js');
   const denied = spawnSync(process.execPath, [cliPath, 'xxx', 'yyy', '--text', 'xxx'], {
     encoding: 'utf8',
   });
@@ -51,7 +51,6 @@ test('CLI は --text 指定時に allowed を返す', () => {
 });
 
 test('CLI は --alphabetClass 指定時に文字クラスを反映した source を返す', () => {
-  const cliPath = path.join(__dirname, '..', 'src', 're2', 'ngWords.js');
   const result = spawnSync(process.execPath, [cliPath, 'xxx', '--alphabetClass', '[A-Z]'], {
     encoding: 'utf8',
   });
@@ -63,7 +62,6 @@ test('CLI は --alphabetClass 指定時に文字クラスを反映した source 
 });
 
 test('CLI は --text の値がなくてもエラーにしない', () => {
-  const cliPath = path.join(__dirname, '..', 'src', 're2', 'ngWords.js');
   const result = spawnSync(process.execPath, [cliPath, 'xxx', '--text'], {
     encoding: 'utf8',
   });
@@ -75,7 +73,6 @@ test('CLI は --text の値がなくてもエラーにしない', () => {
 });
 
 test('CLI は --alphabetClass の値がなくてもエラーにしない', () => {
-  const cliPath = path.join(__dirname, '..', 'src', 're2', 'ngWords.js');
   const result = spawnSync(process.execPath, [cliPath, 'xxx', '--alphabetClass'], {
     encoding: 'utf8',
   });
