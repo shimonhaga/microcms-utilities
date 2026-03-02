@@ -52,6 +52,53 @@
     throw new Error(`Invalid alphabet class: ${alphabetClass}`);
   }
 
+  function compressToRanges(chars) {
+    const sorted = [...new Set(chars)].sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0));
+    const ranges = [];
+
+    let start = sorted[0];
+    let prev = start;
+
+    for (let i = 1; i < sorted.length; i++) {
+      const curr = sorted[i];
+      if (curr.charCodeAt(0) === prev.charCodeAt(0) + 1) {
+        prev = curr;
+        continue;
+      }
+      ranges.push([start, prev]);
+      start = prev = curr;
+    }
+    ranges.push([start, prev]);
+
+    // ranges を アルファベット、数字、その他の順にソートする
+    ranges.sort(([aStart], [bStart]) => {
+      const aCode = aStart.charCodeAt(0);
+      const bCode = bStart.charCodeAt(0);
+      const aType = aCode >= 48 && aCode <= 57 ? 1 : aCode >= 65 && aCode <= 90 ? 2 : aCode >= 97 && aCode <= 122 ? 3 : 4;
+      const bType = bCode >= 48 && bCode <= 57 ? 1 : bCode >= 65 && bCode <= 90 ? 2 : bCode >= 97 && bCode <= 122 ? 3 : 4;
+      if (aType !== bType) {
+        return aType - bType;
+      }
+      return aCode - bCode;
+    });
+
+    return ranges;
+  }
+
+  function rangesToClass(ranges) {
+    return (
+      "[" +
+      ranges
+        .map(([s, e]) => {
+          const escapedStart = escapeForCharClass(s);
+          const escapedEnd = escapeForCharClass(e);
+          return s === e ? escapedStart : `${escapedStart}-${escapedEnd}`;
+        })
+        .join("") +
+      "]"
+    );
+  }
+
   /**
    * 同一長の禁止語集合に対して、先読み/後読みに依存しない展開済み source を生成する
    * @param {string[]} words
@@ -65,21 +112,21 @@
     /** @type {(prefix: string, subset: string[], position: number) => string[]} */
     function expand(prefix, subset, position) {
       const charSet = [...new Set(subset.map((word) => word[position]))];
-      // 例えば excluded = 'a' のとき
+      // 例えば excluded = 'x' のとき
       const excluded = charSet.map(escapeForCharClass).join('');
-      // 単純に [^a] とするのではなく、例えば [b-z0-9_-] のようする
-      const alphabetWithoutExcluded = expandedAlphabet.filter((ch) => !excluded.includes(ch)).join('');
+      // 単純に [^x] とするのではなく、例えば [a-wy-z0-9_-] のようする
+      const excludedClass = rangesToClass(compressToRanges(expandedAlphabet.filter((ch) => !excluded.includes(ch))));
 
       const branches = [];
 
       if (position === length - 1) {
-        branches.push(`${prefix}[${alphabetWithoutExcluded}]`);
+        branches.push(`${prefix}${excludedClass}`);
         return branches;
       }
 
       const rest = length - position - 1;
       branches.push(
-        `${prefix}[${alphabetWithoutExcluded}]${rest === 1 ? alphabetClass : `${alphabetClass}{${rest}}`}`,
+        `${prefix}${excludedClass}${rest === 1 ? alphabetClass : `${alphabetClass}{${rest}}`}`,
       );
 
       for (const ch of charSet) {
