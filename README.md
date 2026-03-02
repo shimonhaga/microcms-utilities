@@ -27,6 +27,15 @@ microCMS 向けのユーティリティ集です。
 
 - `node cli/re2/ngWords.js <禁止語...> [--alphabetClass <文字クラス>] [--text <判定文字列>]`
 
+## tester をブラウザで試す
+
+- `web/re2/tester.html` をブラウザで開くと、そのまま動作確認できます。
+- 正規表現パターン・テスト文字列・フラグ（任意）を入力し、`判定する` を押してください。
+
+## tester CLI
+
+- `node cli/re2/tester.js <正規表現> <テスト文字列>`
+
 ## コミット時のルール
 
 - pre-commit フックで `npm run format:check` が実行されます。
