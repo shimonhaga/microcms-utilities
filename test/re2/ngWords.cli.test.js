@@ -26,9 +26,10 @@ test('CLI は --text 指定時に allowed を返す', () => {
   assert.equal(allowedOutput.allowed, true);
   assert.equal(deniedOutput.alphabetClass, '[a-z0-9_-]');
   assert.equal(allowedOutput.alphabetClass, '[a-z0-9_-]');
-  assert.match(deniedOutput.pattern, /\[\^xy\]\[a-z0-9_-\]\{2\}/);
-  assert.match(deniedOutput.pattern, /xx\[\^x\]/);
-  assert.match(deniedOutput.pattern, /yy\[\^y\]/);
+  assert.equal(deniedOutput.pattern, buildExpandedSafeRegexSource(['xxx', 'yyy']));
+  assert.doesNotMatch(deniedOutput.pattern, /\[\^[^\]]+\]/);
+  assert.match(deniedOutput.pattern, /xx\[[^\]]+\]/);
+  assert.match(deniedOutput.pattern, /yy\[[^\]]+\]/);
 });
 
 test('CLI は --alphabetClass 指定時に文字クラスを反映した source を返す', () => {

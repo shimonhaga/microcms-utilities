@@ -25,28 +25,61 @@
   }
 
   /**
+   * 文字クラスの定義を展開する
+   * @param {string} alphabetClass
+   * @returns {string[]}
+   */
+  function expandAlphabetClass(alphabetClass) {
+    if (alphabetClass.startsWith('[') && alphabetClass.endsWith(']')) {
+      const classContent = alphabetClass.slice(1, -1).split('');
+      let expanded = [];
+      for (let i = 0; i < classContent.length; i++) {
+        if (i + 2 < classContent.length && classContent[i + 1] === '-') {
+          const start = classContent[i].charCodeAt(0);
+          const end = classContent[i + 2].charCodeAt(0);
+          if (start <= end) {
+            for (let code = start; code <= end; code++) {
+              expanded.push(String.fromCharCode(code));
+            }
+            i += 2;
+            continue;
+          }
+        }
+        expanded.push(classContent[i]);
+      }
+      return expanded;
+    }
+    throw new Error(`Invalid alphabet class: ${alphabetClass}`);
+  }
+
+  /**
    * 同一長の禁止語集合に対して、先読み/後読みに依存しない展開済み source を生成する
    * @param {string[]} words
    * @param {string} alphabetClass
+   * @param {string[]} expandedAlphabet
    * @returns {string}
    */
-  function buildExpandedGroupSource(words, alphabetClass) {
+  function buildExpandedGroupSource(words, alphabetClass, expandedAlphabet) {
     const length = words[0].length;
 
     /** @type {(prefix: string, subset: string[], position: number) => string[]} */
     function expand(prefix, subset, position) {
       const charSet = [...new Set(subset.map((word) => word[position]))];
+      // 例えば excluded = 'a' のとき
       const excluded = charSet.map(escapeForCharClass).join('');
+      // 単純に [^a] とするのではなく、例えば [b-z0-9_-] のようする
+      const alphabetWithoutExcluded = expandedAlphabet.filter((ch) => !excluded.includes(ch)).join('');
+
       const branches = [];
 
       if (position === length - 1) {
-        branches.push(`${prefix}[^${excluded}]`);
+        branches.push(`${prefix}[${alphabetWithoutExcluded}]`);
         return branches;
       }
 
       const rest = length - position - 1;
       branches.push(
-        `${prefix}[^${excluded}]${rest === 1 ? alphabetClass : `${alphabetClass}{${rest}}`}`,
+        `${prefix}[${alphabetWithoutExcluded}]${rest === 1 ? alphabetClass : `${alphabetClass}{${rest}}`}`,
       );
 
       for (const ch of charSet) {
@@ -82,6 +115,8 @@
       return `${alphabetClass}+`;
     }
 
+    const expandedAlphabet = expandAlphabetClass(alphabetClass);
+
     /** @type {Map<number, string[]>} */
     const groups = new Map();
     for (const word of words) {
@@ -95,7 +130,7 @@
 
     const groupSources = [...groups.entries()]
       .sort(([lenA], [lenB]) => lenA - lenB)
-      .map(([, groupWords]) => buildExpandedGroupSource(groupWords, alphabetClass));
+      .map(([, groupWords]) => buildExpandedGroupSource(groupWords, alphabetClass, expandedAlphabet));
 
     let regexSource = groupSources.join('|');
 
