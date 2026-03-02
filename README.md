@@ -18,6 +18,15 @@ microCMS 向けのユーティリティ集です。
 - 整形チェック: `npm run format:check`
 - テスト実行: `npm test`
 
+## ngWords をブラウザで試す
+
+- `web/re2/ngWords.html` をブラウザで開くと、そのまま動作確認できます。
+- 禁止語（改行 or カンマ区切り）と判定文字列を入力し、`判定する` を押してください。
+
+## ngWords CLI
+
+- `node cli/re2/ngWords.js <禁止語...> [--alphabetClass <文字クラス>] [--text <判定文字列>]`
+
 ## コミット時のルール
 
 - pre-commit フックで `npm run format:check` が実行されます。

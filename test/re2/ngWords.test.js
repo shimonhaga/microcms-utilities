@@ -5,9 +5,9 @@ const path = require('node:path');
 
 const {
   buildExpandedSafeRegexSource,
-  buildExpandedSafeRegex,
 } = require('../../src/re2/ngWords');
-const cliPath = path.join(__dirname, '../..', 'src', 're2', 'ngWords.js');
+const { buildExpandedSafeRegex } = require('../../cli/re2/ngWords');
+const cliPath = path.join(__dirname, '../..', 'cli', 're2', 'ngWords.js');
 
 test('先読み/後読みなし展開 source を生成できる(news/spec 例)', () => {
   const source = buildExpandedSafeRegexSource(['news', 'spec']);
