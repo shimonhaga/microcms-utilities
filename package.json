@@ -1,0 +1,21 @@
+{
+  "name": "utilities",
+  "version": "0.1.0",
+  "description": "Utilities for microCMS",
+  "license": "UNLICENSED",
+  "author": "Shimon Haga",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "node scripts/setupGitHooks.js"
+  },
+  "dependencies": {
+    "re2": "^1.23.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
