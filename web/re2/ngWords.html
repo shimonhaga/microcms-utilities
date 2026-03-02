@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ngWords browser tester</title>
+    <title>[RE2 用] 予約語正規表現ジェネレータ</title>
     <style>
       body {
         font-family: sans-serif;
@@ -34,10 +34,10 @@
     </style>
   </head>
   <body>
-    <h1>NgWords tester</h1>
+    <h1>[RE2 用] 予約語正規表現ジェネレータ</h1>
 
-    <label for="ngWords">禁止語（改行 or カンマ区切り）</label>
-    <textarea id="ngWords" rows="4">news,spec</textarea>
+    <label for="ngWords">予約語（改行 or カンマ区切り）</label>
+    <textarea id="ngWords" rows="4">news,test</textarea>
 
     <label for="alphabetClass">使える文字種</label>
     <input id="alphabetClass" type="text" value="[a-z0-9_-]" />
@@ -45,32 +45,44 @@
     <label for="text">テスト文字列</label>
     <input id="text" type="text" value="news" />
 
-    <button id="runButton" type="button">判定する</button>
+    <button id="runButton" type="button">実行する</button>
+
+    <h2>出力</h2>
+    <label for="pattern">正規表現パターン</label>
+    <input id="pattern" readonly>
 
     <h2>結果</h2>
     <pre id="result"></pre>
 
     <script src="../../src/re2/ngWords.js"></script>
-    <script src="./ngWords.js"></script>
-    <script>
+    <script type="module">
+      import { RE2JS } from "https://cdn.jsdelivr.net/npm/re2js/+esm";
+
       const ngWordsElement = document.getElementById('ngWords');
       const textElement = document.getElementById('text');
       const alphabetClassElement = document.getElementById('alphabetClass');
       const resultElement = document.getElementById('result');
+      const patternElement = document.getElementById('pattern');
       const runButton = document.getElementById('runButton');
 
       function run() {
         try {
-          const result = window.ngWordsUtils.runWeb(
-            ngWordsElement.value,
-            alphabetClassElement.value || '[a-z0-9_-]',
-            textElement.value,
-          );
+          const ngWords = [...new Set(ngWordsElement.value.split(/[\n,]/).map((word) => word.trim()).filter(Boolean))];
+          const pattern = window.ngWords.buildExpandedSafeRegexSource(ngWords, alphabetClassElement.value || '[a-z0-9_-]');
+          const regexp = RE2JS.compile(pattern, 'u');
+          const allowed = regexp.matches(textElement.value);
           resultElement.textContent = JSON.stringify(
-            result,
+            {
+              ngWords,
+              pattern,
+              alphabetClass: alphabetClassElement.value || '[a-z0-9_-]',
+              text: textElement.value,
+              allowed,
+            },
             null,
             2,
           );
+          patternElement.value = pattern;
         } catch (error) {
           resultElement.textContent = error instanceof Error ? error.message : String(error);
         }
