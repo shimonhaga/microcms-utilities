@@ -3,9 +3,7 @@ const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
 
-const {
-  buildExpandedSafeRegexSource,
-} = require('../../src/re2/ngWords');
+const { buildExpandedSafeRegexSource } = require('../../src/re2/ngWords');
 const cliPath = path.join(__dirname, '../..', 'cli', 're2', 'ngWords.js');
 
 test('CLI は --text 指定時に allowed を返す', () => {

@@ -2,9 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 
-const {
-  buildExpandedSafeRegexSource,
-} = require('../../src/re2/ngWords');
+const { buildExpandedSafeRegexSource } = require('../../src/re2/ngWords');
 const cliPath = path.join(__dirname, '../..', 'cli', 're2', 'ngWords.js');
 
 test('先読み/後読みなし展開 source を生成できる(news/spec 例)', () => {

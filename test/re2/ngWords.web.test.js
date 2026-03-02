@@ -1,9 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const {
-  buildExpandedSafeRegexSource,
-} = require('../../src/re2/ngWords');
+const { buildExpandedSafeRegexSource } = require('../../src/re2/ngWords');
 
 test('web版でも source 生成ができる', () => {
   const source = buildExpandedSafeRegexSource(['news', 'spec']);

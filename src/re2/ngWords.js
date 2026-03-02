@@ -74,8 +74,22 @@
     ranges.sort(([aStart], [bStart]) => {
       const aCode = aStart.charCodeAt(0);
       const bCode = bStart.charCodeAt(0);
-      const aType = aCode >= 48 && aCode <= 57 ? 1 : aCode >= 65 && aCode <= 90 ? 2 : aCode >= 97 && aCode <= 122 ? 3 : 4;
-      const bType = bCode >= 48 && bCode <= 57 ? 1 : bCode >= 65 && bCode <= 90 ? 2 : bCode >= 97 && bCode <= 122 ? 3 : 4;
+      const aType =
+        aCode >= 48 && aCode <= 57
+          ? 1
+          : aCode >= 65 && aCode <= 90
+            ? 2
+            : aCode >= 97 && aCode <= 122
+              ? 3
+              : 4;
+      const bType =
+        bCode >= 48 && bCode <= 57
+          ? 1
+          : bCode >= 65 && bCode <= 90
+            ? 2
+            : bCode >= 97 && bCode <= 122
+              ? 3
+              : 4;
       if (aType !== bType) {
         return aType - bType;
       }
@@ -87,15 +101,15 @@
 
   function rangesToClass(ranges) {
     return (
-      "[" +
+      '[' +
       ranges
         .map(([s, e]) => {
           const escapedStart = escapeForCharClass(s);
           const escapedEnd = escapeForCharClass(e);
           return s === e ? escapedStart : `${escapedStart}-${escapedEnd}`;
         })
-        .join("") +
-      "]"
+        .join('') +
+      ']'
     );
   }
 
@@ -115,7 +129,9 @@
       // 例えば excluded = 'x' のとき
       const excluded = charSet.map(escapeForCharClass).join('');
       // 単純に [^x] とするのではなく、例えば [a-wy-z0-9_-] のようする
-      const excludedClass = rangesToClass(compressToRanges(expandedAlphabet.filter((ch) => !excluded.includes(ch))));
+      const excludedClass = rangesToClass(
+        compressToRanges(expandedAlphabet.filter((ch) => !excluded.includes(ch))),
+      );
 
       const branches = [];
 
@@ -177,7 +193,9 @@
 
     const groupSources = [...groups.entries()]
       .sort(([lenA], [lenB]) => lenA - lenB)
-      .map(([, groupWords]) => buildExpandedGroupSource(groupWords, alphabetClass, expandedAlphabet));
+      .map(([, groupWords]) =>
+        buildExpandedGroupSource(groupWords, alphabetClass, expandedAlphabet),
+      );
 
     let regexSource = groupSources.join('|');
 

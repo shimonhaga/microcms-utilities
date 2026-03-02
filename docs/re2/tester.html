@@ -4,57 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>[RE2 用] 正規表現チェッカー</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        margin: 24px;
-        max-width: 720px;
-      }
-      label {
-        display: block;
-        margin-top: 12px;
-        font-weight: 600;
-      }
-      textarea,
-      input {
-        width: 100%;
-        box-sizing: border-box;
-        margin-top: 6px;
-        padding: 8px;
-      }
-      button {
-        margin-top: 16px;
-        padding: 8px 16px;
-      }
-      pre {
-        background: #f6f8fa;
-        padding: 12px;
-        overflow: auto;
-      }
-    </style>
+    <link rel="stylesheet" href="../assets/css/tester.css" />
   </head>
   <body>
     <h1>[RE2 用] 正規表現チェッカー</h1>
 
-    <p>
-      このページは <code>re2js</code> を利用して判定します。
-    </p>
+    <p>このページは <code>re2js</code> を利用して判定します。</p>
 
     <label for="pattern">正規表現パターン</label>
-    <input id="pattern" type="text" value="^news$">
+    <input id="pattern" type="text" value="^news$" />
 
     <label for="text">テスト文字列</label>
-    <input id="text" type="text" value="news">
+    <input id="text" type="text" value="news" />
 
     <label for="flags">フラグ（任意）</label>
-    <input id="flags" type="text" value="" placeholder="例: i">
+    <input id="flags" type="text" value="" placeholder="例: i" />
 
     <button id="runButton" type="button">判定する</button>
 
     <h2>結果</h2>
     <pre id="result"></pre>
     <script type="module">
-      import { RE2JS } from "https://cdn.jsdelivr.net/npm/re2js/+esm";
+      import { RE2JS } from 'https://cdn.jsdelivr.net/npm/re2js/+esm';
 
       const patternElement = document.getElementById('pattern');
       const textElement = document.getElementById('text');
@@ -62,7 +33,7 @@
       const runButton = document.getElementById('runButton');
       const resultElement = document.getElementById('result');
 
-      const re = RE2JS.compile("abc+");
+      const re = RE2JS.compile('abc+');
 
       function run() {
         try {
