@@ -1,4 +1,4 @@
-# utilities
+# microCMS Utilities
 
 microCMS 向けのユーティリティ集です。
 
@@ -20,7 +20,7 @@ microCMS 向けのユーティリティ集です。
 
 ## ngWords をブラウザで試す
 
-- `web/re2/ngWords.html` をブラウザで開くと、そのまま動作確認できます。
+- `docs/re2/ngWords.html` をブラウザで開くと、そのまま動作確認できます。
 - 禁止語（改行 or カンマ区切り）と判定文字列を入力し、`実行する` を押してください。
 
 ## ngWords CLI
@@ -29,7 +29,7 @@ microCMS 向けのユーティリティ集です。
 
 ## tester をブラウザで試す
 
-- `web/re2/tester.html` をブラウザで開くと、そのまま動作確認できます。
+- `docs/re2/tester.html` をブラウザで開くと、そのまま動作確認できます。
 - 正規表現パターン・テスト文字列・フラグ（任意）を入力し、`判定する` を押してください。
 
 ## tester CLI

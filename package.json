@@ -2,7 +2,7 @@
   "name": "utilities",
   "version": "0.2.5",
   "description": "Utilities for microCMS",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Shimon Haga",
   "type": "commonjs",
   "main": "src/index.js",
